@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Let's Chat</title>
+    <!-- Add the chat logo as icon in the browsers tab -->
+    <link rel="icon" href="chatlogo.png" sizes="16x16" type="image/png" />
+    <!-- CDN Link to include bootstrap for styling -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <!-- Link to use custom css written in index.css file -->
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+          <div class="card text-center">
+            <img src="./chatlogo.png" alt="lets chat logo" class="custom-img" />
+            <h1 class="custom-header">Let's Chat</h1>
+            <form
+              id="messageForm"
+              onsubmit="sendMessage(event)"
+              class="mr-3 ml-3 mb-3"
+            >
+              <div class="form-group">
+                <input
+                  type="text"
+                  id="msg"
+                  placeholder="Type your message here"
+                  class="form-control"
+                />
+              </div>
+              <button type="submit" class="btn btn-outline-success btn-lg">
+                Send
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let socket = new io();
+      function sendMessage(event) {
+        event.preventDefault(); /* Prevents the default behaviour of refresh on form submission */
+        let message =
+          document.getElementById(
+            'msg'
+          ).value; /* Fetches the value entered by the user in message field */
+        socket.emit(
+          'send-chat-message',
+          message
+        ); /* Emits the message from the client to the server via socket connection */
+        document.getElementById('msg').value =
+          ''; /* nullifies the message from input field once emitted */
+      }
+      socket.on('connect', () => {
+        console.log('socket connection established', socket.id);
+      });
+    </script>
+  </body>
+</html>
