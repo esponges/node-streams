@@ -14,6 +14,8 @@ io.on('connect', (socket) => {
   socket.on('send-chat-message', (message) => {
     /* Logs the clients unique id and the message sent into the console */
     console.log(`message from Client ${socket.id} - ${message}`);
+    /* emits the message received, back to the client with the event name chat-message */
+    io.emit('chat-message', message);
   });
 });
 

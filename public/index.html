@@ -40,12 +40,14 @@
                 Send
               </button>
             </form>
+            <div id="displayMessages" class="text-center"></div>
           </div>
         </div>
       </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+      counter = 1;
       let socket = new io();
       function sendMessage(event) {
         event.preventDefault(); /* Prevents the default behaviour of refresh on form submission */
@@ -62,6 +64,14 @@
       }
       socket.on('connect', () => {
         console.log('socket connection established', socket.id);
+      });
+      /* recieves the message when the server fires the event chat-message */
+      socket.on('chat-message', (message) => {
+        /* renders the message send or received on the screen of all the clients */
+        document.getElementById(
+          'displayMessages'
+        ).innerHTML += `<h5>Message ${counter} - ${message}</h5>`;
+        counter++;
       });
     </script>
   </body>
